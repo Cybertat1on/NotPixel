@@ -1,9 +1,8 @@
-[![Static Badge](https://img.shields.io/badge/Telegram-Bot%20Link-Link?style=for-the-badge&logo=Telegram&logoColor=white&logoSize=auto&color=blue)](https://t.me/notpixel/app?startapp=f1197825376
+[![Static Badge](https://img.shields.io/badge/Telegram-Bot%20Link-Link?style=for-the-badge&logo=Telegram&logoColor=white&logoSize=auto&color=blue)](https://t.me/notpixel/app?startapp=f1197825376)
 [![Static Badge](https://img.shields.io/badge/Telegram-Channel-Link?style=for-the-badge&logo=Telegram&logoColor=white&logoSize=auto&color=blue)](https://t.me/CyberToolz)
 
 #  Bot for NotPixel
-
-
+![start-notpixel](https://github.com/user-attachments/assets/e0450f23-4df2-4620-b82e-202ad31b6040)
 
 # 🔥🔥 PYTHON version must be 3.10 - 3.11.5 🔥🔥
 
