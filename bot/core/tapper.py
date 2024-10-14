@@ -158,12 +158,12 @@ class Tapper:
     def get_cor(self, session: requests.Session):
         res = session.get("https://raw.githubusercontent.com/Cybertat1on/json_pixel_coordinates/refs/heads/main/data.json")
         if res.status_code == 200:
-            cor = res.json()
-            paint = random.choice(cor['data'])
-            color = paint['color']
-            random_cor = random.choice(paint['cordinates'])
-            px_id = calc_id(random_cor['start'][0], random_cor['start'][1], random_cor['end'][0], random_cor['end'][1])
-            return [color, px_id]
+           cor = res.json()
+           paint = random.choice(cor['data'])
+           color = paint['color']
+           random_cor = random.choice(paint['cordinates'])
+           px_id = calc_id(random_cor['start'][0], random_cor['start'][1], random_cor['end'][0], random_cor['end'][1])
+           return [color, px_id]
 
     def repaint(self, session: requests.Session, chance_left):
         if settings.X3POINTS:
@@ -198,6 +198,7 @@ class Tapper:
                 "newColor": data[0],
                 "pixelId": data[1]
             }
+            data = self.get_cor(session)
         else:
             data1 = [str(self.generate_random_color()), int(self.generate_random_pos())]
             payload = {
@@ -210,6 +211,7 @@ class Tapper:
                 logger.success(
                     f"<cyan>{self.session_name}</cyan> | <green>Painted <cyan>{data[1]}</cyan> successfully new color: <cyan>{data[0]}</cyan> | Earned <light-blue>{int(response.json()['balance']) - self.balance}</light-blue> | 💰 Balance: <yellow>{response.json()['balance']}</yellow> | Repaint left: <yellow>{chance_left}</yellow></green>")
                 self.balance = int(response.json()['balance'])
+                data = self.get_cor(session)
             else:
                 logger.success(
                     f"<cyan>{self.session_name}</cyan> | <green>Painted <cyan>{data[1]}</cyan> successfully new color: <cyan>{data1[0]}</cyan> | Earned <light-blue>{int(response.json()['balance']) - self.balance}</light-blue> | 💰 Balance: <yellow>{response.json()['balance']}</yellow> | Repaint left: <yellow>{chance_left}</yellow></green>")
@@ -304,7 +306,7 @@ class Tapper:
                                     self.repaintV2(session, total_chance, i, data)
                                 else:
                                     self.repaint(session, total_chance)
-                                sleep_ = random.uniform(1, 2)
+                                sleep_ = random.uniform(0, 0.5)
                                 logger.info(f"<cyan>{self.session_name}</cyan> | 💤 Sleep <red>{round(sleep_)}s</red> before continue...")
                                 await asyncio.sleep(sleep_)
 

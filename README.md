@@ -6,6 +6,8 @@
 
 # 🔥🔥 PYTHON version must be 3.10 - 3.11.5 🔥🔥
 
+> 🇷 🇺 README in russian available [[here](https://github.com/Cybertat1on/NotPixel/blob/main/README-RU.md)]
+
 ## Features  
 | Feature                                                     | Supported  |
 |---------------------------------------------------------------|:----------------:|
