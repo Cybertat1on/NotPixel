@@ -1,4 +1,4 @@
-from .logger import logger
+from .logger import logger, info, warning, debug, success, error, critical
 from . import launcher
 
 

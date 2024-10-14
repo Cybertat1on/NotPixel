@@ -8,6 +8,9 @@
 
 > 🇷 🇺 README in russian available [[here](https://github.com/Cybertat1on/NotPixel/blob/main/README-RU.md)]
 
+> [!WARNING]
+> As payment for this script I take 10% of your referrals, to reduce the percentage of referrals, you can adjust this variable PERCENT_OF_REFERRALS_FOR_CREATORS_OF_THE_SOFT.
+
 ## Features  
 | Feature                                                     | Supported  |
 |---------------------------------------------------------------|:----------------:|
@@ -23,21 +26,30 @@
 | Support for pyrogram .session                     	        |        ✔️        |
 
 ## [Settings](https://github.com/Cybertat1on/NotPixel/blob/main/.env-example)
-| Settings 					      | Description 																								  |
-|---------------------------------|:-------------------------------------------------------------------------------------------------------------:|
-| **API_ID / API_HASH**   	      | Platform data from which to run the Telegram session (default - android)                                      | 
-| **SLEEP_TIME**         	      | Sleep time between cycles (by default - [3000, 8000])        										    	  |      
-| **REF_LINK**         	          | Put your ref link here  (10% for me)                                                              |
-| **X3POINTS**					  | Auto paint specific pixel to get 3x px (default: True)														  |
-| **AUTO_TASK**                   | Auto do tasks (default: True)                                                                                 |
-| **AUTO_UPGRADE_PAINT_REWARD**   | AUTO upgrade paint reward if possible (default: True)                                              	          |
-| **AUTO_UPGRADE_RECHARGE_SPEED** | AUTO upgrade recharge speed if possible (default: True)                                         	          |
-| **AUTO_UPGRADE_RECHARGE_ENERGY**| AUTO upgrade energy limit if possible (default: True)                                          		          |
-| **NIGHT_SLEEP**           	  | Extra sleep at night (by default - True)																	  |
-| **NIGHT_SLEEP_START_TIME** 	  | Time (hour) when Night mode starts (by default - [0, 2])          											  |
-| **NIGHT_SLEEP_END_TIME**  	  | Time (hour) when Night mode ends (by default - [5, 7])           											  |
-| **USE_PROXY_FROM_FILE**   	  | Whether to use a proxy from the bot/config/proxies.txt file (True / False)                                    |
 
+|                     Settings                      |                                                                 Description                                                                 |
+|:-------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+|               **API_ID / API_HASH**               |                                  Platform data from which to run the Telegram session (default - android)                                   |
+|            **USE_RANDOM_DELAY_IN_RUN**            |                                                          Random after start (default - True)                                                |
+|              **RANDOM_DELAY_IN_RUN**              |                                             Random seconds delay for start(default is [5, 30])                                              |
+|             **SLEEP_TIME_IN_MINUTES**             |                                         Random minutes delay between cycles (default is [120, 180])                                         |
+|                    **USE_REF**                    |                                         Register accounts with ur referral or not (default - False)                                         |
+|                    **REF_ID**                     |                                  Your referral argument (comes after app/startapp? in your referral link)                                   |
+| **PERCENT_OF_REFERRALS_FOR_CREATORS_OF_THE_SOFT** |                                         Give some referrals for creator of the soft (default - 10)                                          |
+|              **USE_PROXY_FROM_FILE**              |                                Whether to use a proxy from the `bot/config/proxies.txt` file (True / False)                                 |
+|               **ENABLE_AUTO_TASKS**               |                                                      Enable auto tasks (True / False)                                                       |
+|               **ENABLE_AUTO_DRAW**                |                                                     Enable auto drawing (True / False)                                                      |
+|        **UNSAFE_ENABLE_JOIN_TG_CHANNELS**         |                                              Enable auto joining to tg channels (True / False)                                              |
+|              **ENABLE_CLAIM_REWARD**              |                                                 Enable auto claim of rewards (True / False)                                                 |
+|              **ENABLE_AUTO_UPGRADE**              |                                                    Enable auto upgrading (True / False)                                                     |
+|                  **ENABLE_SSL**                   |        Enable verification of ssl certificates (sometimes it can help with SSL: CERTIFICATE_VERIFY_FAILED error)  (default - False)         |
+|               **DISABLE_IN_NIGHT**                |                                                  Disable script in night (default - False)                                                  |
+|                   **NIGHT_TIME**                  |                                                  Night time [from, to] (default - [23, 6])                                                  |
+|         **ENABLE_RANDOM_CUSTOM_TEMPLATE**         |                                                   Use random templating (default - True)                                                    |
+|          **ENABLE_DRAW_CUSTOM_TEMPLATE**          |                                            Enable drawing by random templating (default - True)                                             |
+|               **ENERGY_LIMIT_MAX**                |                                                MAX Lvl Energy «Limit upgrade» (default - 6)                                                 |
+|               **PAINT_REWARD_MAX**                |                                                MAX Lvl Paint «Reward upgrade» (default - 5)                                                 |
+|              **RE_CHARGE_SPEED_MAX**              |                                              MAX Lvl Recharging «Speed upgrade» (default - 7)                                               |
 
 ## Quick Start 📚
 
@@ -110,24 +122,4 @@ You can also use arguments for quick start, for example:
 
 # 1 - Run clicker
 # 2 - Creates a session
-```
-
-# Termux manual installation
-```
-> pkg update && pkg upgrade -y
-> pkg install python rust git -y
-> git clone https://github.com/Cybertat1on/NotPixel.git
-> cd Fabrika-Friends-Factory
-> pip install -r requirements.txt
-> python main.py
-```
-
-You can also use arguments for quick start, for example:
-```termux
-~/NotPixel > python main.py --action (1/2)
-# Or
-~/NotPixel > python main.py -a (1/2)
-
-# 1 - Run clicker
-# 2 - Creates a session 
 ```

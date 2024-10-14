@@ -1,1 +1,5 @@
-type://203.123.244.167:5898:login:pass
+type://user:pass@ip:port
+type://user:pass:ip:port
+type://ip:port:user:pass
+type://ip:port@user:pass
+type://ip:port

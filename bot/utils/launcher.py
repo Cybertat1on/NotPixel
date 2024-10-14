@@ -9,12 +9,11 @@ from better_proxy import Proxy
 
 from bot.config import settings
 from bot.utils import logger
-from bot.core.tapper import run_tapper, run_tapper1
+from bot.core.tapper import run_tapper
 from bot.core.registrator import register_sessions
 
-
 start_text = """
- 
+
 ╭━╮╱╭┳━━━┳━━━━┳━━━┳━━┳━╮╭━┳━━━┳╮
 ┃┃╰╮┃┃╭━╮┃╭╮╭╮┃╭━╮┣┫┣┻╮╰╯╭┫╭━━┫┃
 ┃╭╮╰╯┃┃╱┃┣╯┃┃╰┫╰━╯┃┃┃╱╰╮╭╯┃╰━━┫┃
@@ -29,6 +28,7 @@ Select an action:
 """
 
 global tg_clients
+
 
 def get_session_names() -> list[str]:
     session_names = sorted(glob.glob("sessions/*.session"))
@@ -96,13 +96,13 @@ async def process() -> None:
                 action = int(action)
                 break
 
-    if action == 2:
-        await register_sessions()
-    elif action == 1:
+    if action == 1:
         tg_clients = await get_tg_clients()
-        proxies = get_proxies()
-        await run_tapper1(tg_clients=tg_clients, proxies=proxies)
 
+        await run_tasks(tg_clients=tg_clients)
+
+    elif action == 2:
+        await register_sessions()
 
 async def run_tasks(tg_clients: list[Client]):
     proxies = get_proxies()

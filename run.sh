@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/bin/sh
 # Проверка на наличие папки venv
 if [ ! -d "venv" ]; then
     echo "Creating virtual environment..."
@@ -21,6 +20,7 @@ if [ ! -f "venv/installed" ]; then
         echo "requirements.txt not found, skipping dependency installation."
     fi
 else
+    pip3 install -r requirements.txt
     echo "Dependencies already installed, skipping installation."
 fi
 
@@ -30,6 +30,17 @@ if [ ! -f ".env" ]; then
 else
 	echo "Skipping .env copying"
 fi
+
+#Обновление локального репозитория без удаления изменений
+
+if [ ! -f ".git" ]; then
+  git init
+  git remote add origin git@github.com:YarmolenkoD/notpixel.git
+fi
+
+git stash
+git pull
+git stash pop
 
 echo "Starting the bot..."
 python3 main.py
