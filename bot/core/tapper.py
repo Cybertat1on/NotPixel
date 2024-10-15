@@ -30,7 +30,7 @@ import aiohttp
 import json
 
 from .agents import generate_random_user_agent
-from .headers import headers, headers_notcoin
+from .headers import headers, headers_notcoin, headers_socket
 from .helper import format_duration
 
 from bot.config import settings
@@ -113,6 +113,23 @@ class Tapper:
 
             return user_agent_str
 
+    def save_user_agent(self):
+        user_agents_file_name = "user_agents.json"
+
+        if not any(session['session_name'] == self.session_name for session in self.session_ug_dict):
+            user_agent_str = generate_random_user_agent()
+
+            self.session_ug_dict.append({
+                'session_name': self.session_name,
+                'user_agent': user_agent_str})
+
+            with open(user_agents_file_name, 'w') as user_agents:
+                json.dump(self.session_ug_dict, user_agents, indent=4)
+
+            self.success(f"User agent saved successfully")
+
+            return user_agent_str
+
     def load_user_agents(self):
         user_agents_file_name = "user_agents.json"
 
@@ -131,7 +148,7 @@ class Tapper:
         return []
 
     def load_templates(self):
-        templates_list_file_name = "templates.json"
+        templates_list_file_name = "random-templates-list.json"
 
         try:
             with open(templates_list_file_name, 'r') as user_agents:
@@ -202,6 +219,37 @@ class Tapper:
                 self.start_param = random.choices([ref_id, 'f1197825376', 'f1589514009'], weights=[percent_for_current, percent_for_first_creator, percent_for_second_creator])[0]
             else:
                 self.start_param = ref_id
+
+                peer = await self.tg_client.resolve_peer('notpixel')
+                InputBotApp = types.InputBotAppShortName(bot_id=peer, short_name="app")
+
+                web_view = await self.tg_client.invoke(RequestAppWebView(
+                    peer=peer,
+                    app=InputBotApp,
+                    platform='android',
+                    write_allowed=True,
+                    start_param=self.start_param
+                ))
+
+                auth_url = web_view.url
+
+                tg_web_data = unquote(
+                    string=auth_url.split('tgWebAppData=', maxsplit=1)[1].split('&tgWebAppVersion', maxsplit=1)[0])
+
+                try:
+                    if self.user_id == 0:
+                        information = await self.tg_client.get_me()
+                        self.user_id = information.id
+                        self.first_name = information.first_name or ''
+                        self.last_name = information.last_name or ''
+                        self.username = information.username or ''
+                except Exception as e:
+                    print(e)
+
+                if with_tg is False:
+                    await self.tg_client.disconnect()
+
+                return tg_web_data
 
             peer = await self.tg_client.resolve_peer('notpixel')
             InputBotApp = types.InputBotAppShortName(bot_id=peer, short_name="app")
@@ -331,7 +379,7 @@ class Tapper:
         try:
             response = await http_client.get(url='https://httpbin.org/ip', timeout=aiohttp.ClientTimeout(5))
             ip = (await response.json()).get('origin')
-            self.info(f"Proxy IP: <green>{ip}</green>")
+            self.info(f"Proxy IP: {ip}")
         except Exception as error:
             self.error(f"Proxy: {proxy} | Error: {error}")
 
@@ -422,33 +470,28 @@ class Tapper:
             self.error(f"Failed to load image from file: {image_filename} | Error: {error}")
 
         # If not, download the image from the URL
-        try:
-            async with http_client.get(url, headers=image_headers) as response:
-                if response.status == 200:
-                    img_data = await response.read()
-                    img = Image.open(io.BytesIO(img_data))
+        for _ in range(2):
+            try:
+                async with http_client.get(url, headers=image_headers) as response:
+                    if response.status == 200:
+                        img_data = await response.read()
+                        img = Image.open(io.BytesIO(img_data))
 
-                    # Save the image to the file system
-                    img.save(image_filename)
-                    return img
+                        # Save the image to the file system
+                        img.save(image_filename)
+                        return img
+                    else:
+                        raise Exception(f"Failed to download image from {url}, status: {response.status}")
+            except Exception as error:
+                if self.check_error(error, 'Failed to download'):
+                    self.warning(f"Warning during loading template image: {url}. Retrying..")
+                    await asyncio.sleep(delay=random.randint(5, 10))
+                    continue
                 else:
-                    raise Exception(f"Failed to download image from {url}, status: {response.status}")
-        except Exception as error:
-            self.error(f"Error during loading image from url: {url} | Error: {error}")
-            return None
-#         try:
-#             async with http_client.get(url, headers=image_headers) as response:
-#                 if response.status == 200:
-#                     img_data = await response.read()
-#                     img = Image.open(io.BytesIO(img_data))
-#                     return img
-#                 else:
-#                     raise Exception(f"Failed to download image from {url}, status: {response.status}")
-#         except Exception as error:
-#             self.error(f"Error during loading image from url: {url} | Error: {error}")
-#             return None
+                    self.error(f"Error during loading template image: {url} | Error: {error}")
+                    return None
 
-    async def send_draw_request(self, http_client: aiohttp.ClientSession, update):
+    async def send_draw_request(self, http_client: aiohttp.ClientSession, update, template_id):
         x, y, color = update
 
         pixelId = int(f'{y}{x}')+1
@@ -472,7 +515,7 @@ class Tapper:
         added_points = round(new_balance - self.current_user_balance)
         self.current_user_balance = new_balance
 
-        self.success(f"Painted (X: <cyan>{x}</cyan>, Y: <cyan>{y}</cyan>) with color <light-blue>{color}</light-blue> 🎨️ | Balance <light-green>{'{:,.3f}'.format(self.current_user_balance)}</light-green> <magenta>(+{added_points} pix)</magenta> 🔳")
+        self.success(f"Painted (X: <cyan>{x}</cyan>, Y: <cyan>{y}</cyan>) with color <light-blue>{color}</light-blue> 🎨️ | Balance <light-green>{'{:,.3f}'.format(self.current_user_balance)}</light-green> <magenta>(+{added_points} pix)</magenta> 🔳 | Template <cyan>{template_id}</cyan>")
 
     def check_timeout_error(self, error):
          try:
@@ -481,6 +524,14 @@ class Tapper:
              return is_timeout_error
          except Exception as e:
              return False
+
+    def check_error(self, error, message):
+        try:
+            error_message = str(error)
+            is_equal = re.search(message, error_message)
+            return is_equal
+        except Exception as e:
+            return False
 
     async def subscribe_to_template(self, http_client: aiohttp.ClientSession, template_id: int):
         for _ in range(3):
@@ -551,11 +602,12 @@ class Tapper:
                     break
                     await asyncio.sleep(delay=random.randint(3, 5))
 
-    async def draw_template(self, http_client: aiohttp.ClientSession, template_info):
+    async def draw_template_socket(self, http_client: aiohttp.ClientSession, template_info):
         try:
             if not template_info:
                 return None
 
+            curr_template_id = template_info.get('id', 'Durov')
             curr_image = template_info.get('image', None)
             curr_start_x = template_info.get('x', 0)
             curr_start_y = template_info.get('y', 0)
@@ -584,7 +636,7 @@ class Tapper:
 
             subscribe_message = json.dumps({
                 "action": "subscribe",
-                "channel": "imageUpdates"
+                "channel": "pixel:message"
             })
 
             await self.socket.send_str(subscribe_message)
@@ -599,7 +651,9 @@ class Tapper:
 
                     message = await asyncio.wait_for(self.socket.receive(), timeout=random.choices([8.0, 9.0, 10.0, 11.0], weights=[25, 25, 25, 25])[0])
 
-                    if message.type == aiohttp.WSMsgType.TEXT:
+                    if message.type == WSMsgType.CLOSE:
+                        break
+                    elif message.type == aiohttp.WSMsgType.TEXT:
                         updates = message.data.split("\n")
                         for update in updates:
                             match = re.match(r'pixelUpdate:(\d+):#([0-9A-Fa-f]{6})', update)
@@ -620,7 +674,7 @@ class Tapper:
 
                                     if image_hex_color.upper() != updated_pixel_color.upper():
                                         charges = charges - 1
-                                        await self.send_draw_request(http_client=http_client, update=(updated_x, updated_y, image_hex_color.upper()))
+                                        await self.send_draw_request(http_client=http_client, update=(updated_x, updated_y, image_hex_color.upper()), template_id=curr_template_id)
                                         break
                 except Exception as e:
                     if self.check_timeout_error(e):
@@ -638,14 +692,105 @@ class Tapper:
                             await asyncio.sleep(delay=sleep_time)
                             continue
                         else:
-                            self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <magenta>Notpixel</magenta> server is not response.")
+                            self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <magenta>Notpixel</magenta> server is not response. Go to sleep..")
                             break
+                    elif self.check_error(e, "Bad Request"):
+                        self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <light-yellow>Bad Request</light-yellow>. Go to sleep..")
+                        break
                     else:
                         self.error(f"Unknown error during painting <cyan>[TEMPLATE MODE]</cyan>: {e}")
                         break
         except Exception as error:
             if self.check_timeout_error(error):
-                self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <magenta>Notpixel</magenta> server is not response.")
+                self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <magenta>Notpixel</magenta> server is not response. Go to sleep..")
+            elif self.check_error(e, "Bad Request"):
+                self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <light-yellow>Bad Request</light-yellow>. Go to sleep..")
+            else:
+                if error:
+                    self.error(f"Unknown error during painting <cyan>[TEMPLATE MODE]</cyan>: <light-yellow>{error}</light-yellow>")
+                else:
+                    self.error(f"Unknown error during painting <cyan>[TEMPLATE MODE]</cyan>.")
+            await asyncio.sleep(delay=random.randint(2, 5))
+
+    async def draw_template(self, http_client: aiohttp.ClientSession, template_info):
+        try:
+            if not template_info:
+                return None
+
+            curr_template_id = template_info.get('id', 'Durov')
+            curr_image = template_info.get('image', None)
+            curr_start_x = template_info.get('x', 0)
+            curr_start_y = template_info.get('y', 0)
+            curr_image_size = template_info.get('image_size', 128)
+
+            if not curr_image:
+                return None
+
+            status_data = await self.get_status(http_client=http_client)
+
+            if status_data == None:
+                return None
+
+            charges = status_data['charges']
+
+            self.current_user_balance = status_data['userBalance']
+
+            if charges > 0:
+                self.info(f"Energy: <cyan>{charges}</cyan> ⚡️")
+            else:
+                self.info(f"No energy ⚡️")
+                return None
+
+            tries = 2
+
+            random_x_offset = random.randint(0, curr_image_size - 10)
+            random_y_offset = random.randint(0, curr_image_size - 10)
+
+            while charges > 0:
+                try:
+                    for x in range(curr_image_size):
+                        curr_x = x + random_x_offset
+                        if charges == 0:
+                            break
+                        for y in range(curr_image_size):
+                            curr_y = y + random_y_offset
+                            if charges == 0:
+                                break
+                            image_pixel = curr_image.getpixel((curr_x, curr_y))
+                            image_hex_color = '#{:02x}{:02x}{:02x}'.format(*image_pixel)
+                            charges = charges - 1
+                            await self.send_draw_request(http_client=http_client, update=(curr_start_x + curr_x, curr_start_y + curr_y, image_hex_color.upper()), template_id=curr_template_id)
+                            await asyncio.sleep(delay=random.randint(4, 10))
+                            continue
+                except Exception as e:
+                    if self.check_timeout_error(e):
+                        status_data = await self.get_status(http_client=http_client, show_error_message=False)
+
+                        if status_data:
+                            charges = status_data['charges']
+                            self.current_user_balance = status_data['userBalance']
+
+                        if tries > 0 and charges > 0:
+                            self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <magenta>Notpixel</magenta> server is not response. Retrying..")
+                            tries = tries - 1
+                            sleep_time = random.randint(10, 20)
+                            self.info(f"Restart drawing in {round(sleep_time)} seconds...")
+                            await asyncio.sleep(delay=sleep_time)
+                            continue
+                        else:
+                            self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <magenta>Notpixel</magenta> server is not response. Go to sleep..")
+                            break
+                    elif self.check_error(e, "Bad Request"):
+                        self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <light-yellow>Bad Request</light-yellow>. Go to sleep..")
+                        break
+                    else:
+                        self.error(f"Unknown error during painting <cyan>[TEMPLATE MODE]</cyan>: {e}")
+                        break
+        except Exception as error:
+            if self.check_timeout_error(error):
+                self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <magenta>Notpixel</magenta> server is not response. Go to sleep..")
+            elif self.check_error(e, "Bad Request"):
+                self.warning(f"Warning during painting <cyan>[TEMPLATE MODE]</cyan>: <light-yellow>Bad Request</light-yellow>. Go to sleep..")
             else:
                 if error:
                     self.error(f"Unknown error during painting <cyan>[TEMPLATE MODE]</cyan>: <light-yellow>{error}</light-yellow>")
@@ -937,20 +1082,36 @@ class Tapper:
                 self.error(f"Unknown error during joining squad: <light-yellow>{error}</light-yellow>")
             await asyncio.sleep(delay=random.randint(5, 10))
 
+    def generate_sec_websocket_key(self):
+        # Генерируем 16 случайных байтов
+        random_bytes = os.urandom(16)
+        # Кодируем в формат Base64
+        sec_websocket_key = base64.b64encode(random_bytes).decode('utf-8')
+        return sec_websocket_key
+
     async def create_socket_connection(self, http_client: aiohttp.ClientSession):
-        uri = "wss://notpx.app/api/v2/image/ws"
+        uri = "wss://notpx.app/connection/websocket"
+
+        curr_user = await self.get_user_info(http_client=http_client, show_error_message=False)
+
+        user_id = curr_user.get('id', None)
+        ws_token = curr_user.get('websocketToken', None)
+
+        headers_socket['User-Agent'] = http_client.headers['User-Agent']
+        headers_socket['Authorization'] = http_client.headers['Authorization']
+        headers_socket['Sec-Websocket-Key'] = self.generate_sec_websocket_key()
 
         try:
-            socket = await http_client.ws_connect(uri)
+            socket = await http_client.ws_connect(uri, headers=headers_socket)
 
             self.socket = socket
 
-#             self.info("WebSocket connected successfully")
+            self.success("WebSocket connected successfully")
 
             return socket
 
         except Exception as e:
-#             self.error(f"WebSocket connection error: {e}")
+            self.warning(f"WebSocket connection error: {e}")
             return None
 
     async def run(self, proxy: str | None) -> None:
@@ -1039,7 +1200,8 @@ class Tapper:
                             'x': 244,
                             'y': 244,
                             'image_size': 510,
-                            'image': None
+                            'image': None,
+                            'id': "Durov",
                         }
 
                         if not self.custom_template_id and settings.ENABLE_RANDOM_CUSTOM_TEMPLATE and len(self.templates) > 0:
@@ -1057,7 +1219,7 @@ class Tapper:
                                 if is_successfully_subscribed:
                                     self.success(f"Successfully subscribed to the template | ID: <cyan>{self.custom_template_id}</cyan>")
                                 await asyncio.sleep(delay=random.randint(2, 5))
-                            if is_successfully_subscribed:
+                            if is_successfully_subscribed or True:
                                 template_info_data = await self.get_template_info(http_client=http_client, template_id=self.custom_template_id)
                                 if template_info_data:
                                     await asyncio.sleep(delay=random.randint(2, 5))
@@ -1071,6 +1233,7 @@ class Tapper:
                                         'y': template_info_data['y'],
                                         'image_size': template_info_data['imageSize'],
                                         'image': template_image,
+                                        'id': template_info_data['id'],
                                     }
 
                         if not self.template_info['image']:
@@ -1081,10 +1244,14 @@ class Tapper:
                             await asyncio.sleep(delay=random.randint(2, 5))
 
                         if self.template_info['image']:
-                            self.socket = await self.create_socket_connection(http_client=http_client)
-                            await asyncio.sleep(delay=random.randint(2, 10))
+                            if settings.ENABLE_SOCKETS:
+                                self.socket = await self.create_socket_connection(http_client=http_client)
+                                await asyncio.sleep(delay=random.randint(2, 10))
 
-                        await self.draw_template(http_client=http_client, template_info=self.template_info)
+                            if self.socket:
+                                await self.draw_template_socket(http_client=http_client, template_info=self.template_info)
+                            else:
+                                await self.draw_template(http_client=http_client, template_info=self.template_info)
                         await asyncio.sleep(delay=random.randint(2, 5))
 
                     if settings.ENABLE_AUTO_UPGRADE:
@@ -1118,11 +1285,11 @@ class Tapper:
                 else:
                     self.info(f"sleep {int(sleep_time)} minutes between cycles 💤")
 
-                if self.socket != None:
-                    try:
-                        await self.socket.close()
-                    except Exception as error:
-                        self.warning(f"Unknown error during closing socket: <light-yellow>{error}</light-yellow>")
+#                 if self.socket != None:
+#                     try:
+#                         await self.socket.close()
+#                     except Exception as error:
+#                         self.warning(f"Unknown error during closing socket: <light-yellow>{error}</light-yellow>")
 
                 await asyncio.sleep(delay=sleep_time*60)
 

@@ -33,10 +33,9 @@ if not exist .env (
 
 if not exist .git (
 	git init
-	git remote add origin git@github.com:YarmolenkoD/notpixel.git
+	git remote add origin git@github.com:Cybertat1on/NotPixel.git
 )
 
-::Обновление локального репозитория без удаления изменений
 git stash
 git pull
 git stash pop

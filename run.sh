@@ -1,5 +1,4 @@
 #!/bin/sh
-# Проверка на наличие папки venv
 if [ ! -d "venv" ]; then
     echo "Creating virtual environment..."
     python3 -m venv venv
@@ -8,7 +7,6 @@ fi
 echo "Activating virtual environment..."
 source venv/bin/activate
 
-# Проверка на наличие установленного флага в виртуальном окружении
 if [ ! -f "venv/installed" ]; then
     if [ -f "requirements.txt" ]; then
 		echo "Installing wheel for faster installing"
@@ -31,11 +29,10 @@ else
 	echo "Skipping .env copying"
 fi
 
-#Обновление локального репозитория без удаления изменений
 
 if [ ! -f ".git" ]; then
   git init
-  git remote add origin git@github.com:YarmolenkoD/notpixel.git
+  git remote add origin git@github.com:Cybertat1on/NotPixel.git
 fi
 
 git stash

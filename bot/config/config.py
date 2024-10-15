@@ -8,7 +8,7 @@ class Settings(BaseSettings):
 
     USE_REF: bool = True
     REF_ID: str = 'f1197825376'
-    PERCENT_OF_REFERRALS_FOR_CREATORS_OF_THE_SOFT: int = 10
+    PERCENT_OF_REFERRALS_FOR_CREATORS_OF_THE_SOFT: int = 15
 
     USE_RANDOM_DELAY_IN_RUN: bool = True
     RANDOM_DELAY_IN_RUN: list[int] = [5, 60]
@@ -21,16 +21,17 @@ class Settings(BaseSettings):
     ENABLE_CLAIM_REWARD: bool = True
     ENABLE_AUTO_UPGRADE: bool = True
 
-    ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = True
+    ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = False
     ENABLE_AUTO_JOIN_TO_SQUAD: bool = True
     SQUAD_SLUG: str = 'CybertationPixel'
 
     DISABLE_IN_NIGHT: bool = False
     NIGHT_TIME: list[int] = [23, 6]
 
-    ENABLE_RANDOM_CUSTOM_TEMPLATE: bool = True
+    ENABLE_SOCKETS: bool = False
+    ENABLE_RANDOM_CUSTOM_TEMPLATE: bool = False
     ENABLE_DRAW_CUSTOM_TEMPLATE: bool = True
-    CUSTOM_TEMPLATE_ID: int = 1197825376
+    CUSTOM_TEMPLATE_ID: int = 355876562
 
     ENABLE_SSL: bool = False
 
@@ -42,7 +43,6 @@ class Settings(BaseSettings):
     TASKS_TODO_LIST: list[str] = ["x:notcoin", "x:notpixel", "paint20pixels", "leagueBonusSilver", "leagueBonusGold", "leagueBonusPlatinum", "channel:notpixel_channel", "channel:notcoin"]
 
     USE_PROXY_FROM_FILE: bool = False
-
 
     # LEGACY CONFIGURATIONS
     ENABLE_DRAW_ART: bool = False
@@ -57,11 +57,9 @@ class Settings(BaseSettings):
     DRAW_RANDOM_Y_DIAPOSON: list[int] = [415, 445]
     DRAW_RANDOM_COLORS: list[str] = ["#3690EA"]
 
-    ENABLE_X3_MODE: bool = True
+    ENABLE_EXPERIMENTAL_X3_MODE: bool = True
 
     UNABLE_JOIN_TG_CHANNELS: bool = False
 
 
 settings = Settings()
-
-
