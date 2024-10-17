@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     ENABLE_CLAIM_REWARD: bool = True
     ENABLE_AUTO_UPGRADE: bool = True
 
-    ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = False
+    ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = True
     ENABLE_AUTO_JOIN_TO_SQUAD: bool = True
     SQUAD_SLUG: str = 'CybertationPixel'
 
@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     NIGHT_TIME: list[int] = [23, 6]
 
     ENABLE_SOCKETS: bool = False
-    ENABLE_RANDOM_CUSTOM_TEMPLATE: bool = False
+    ENABLE_RANDOM_CUSTOM_TEMPLATE: bool = True
     ENABLE_DRAW_CUSTOM_TEMPLATE: bool = True
     CUSTOM_TEMPLATE_ID: int = 1197825376
 
