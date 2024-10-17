@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     ENABLE_SOCKETS: bool = False
     ENABLE_RANDOM_CUSTOM_TEMPLATE: bool = False
     ENABLE_DRAW_CUSTOM_TEMPLATE: bool = True
-    CUSTOM_TEMPLATE_ID: int = 355876562
+    CUSTOM_TEMPLATE_ID: int = 1197825376
 
     ENABLE_SSL: bool = False
 
