@@ -148,7 +148,7 @@ class Tapper:
         return []
 
     def load_templates(self):
-        templates_list_file_name = "random-templates-list.json"
+        templates_list_file_name = "templates.json"
 
         try:
             with open(templates_list_file_name, 'r') as user_agents:
