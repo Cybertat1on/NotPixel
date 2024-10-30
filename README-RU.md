@@ -25,6 +25,7 @@
 | Автозадание                                                 |        ✔️        |
 | Авто апгрейд                                                |        ✔️        |
 | Ночной режим                 							                        |        ✔️        |
+| Актуальный список шаблонов(в браузере)                       |        ✔️        |
 | Поддержка пирограммы .session 		                            |        ✔️        |
 
 ## [Настройки](https://github.com/Cybertat1on/NotPixel/blob/main/.env-example/)
@@ -97,12 +98,13 @@ python3 main.py
 
 Также для быстрого запуска вы можете использовать аргументы, например:
 ```shell
-~/NotPixel >>> python3 main.py --action (1/2)
+~/NotPixel >>> python3 main.py --action (1/3)
 # Or
-~/NotPixel >>> python3 main.py -a (1/2)
+~/NotPixel >>> python3 main.py -a (1/3)
 
 # 1 - Запускает кликер
 # 2 - Создает сессию
+# 3 - Актуальный список шаблонов(в браузере)
 ```
 
 
@@ -118,10 +120,11 @@ python main.py
 
 Также для быстрого запуска вы можете использовать аргументы, например:
 ```shell
-~/NotPixel >>> python main.py --action (1/2)
+~/NotPixel >>> python main.py --action (1/3)
 # Или
-~/NotPixel >>> python main.py -a (1/2)
+~/NotPixel >>> python main.py -a (1/3)
 
 # 1 - Запускает кликер
 # 2 - Создает сессию
+# 3 - Актуальный список шаблонов(в браузере)
 ```

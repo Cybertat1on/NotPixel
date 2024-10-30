@@ -13,15 +13,29 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.165 Mobile Safari/537.36'
 }
 
+headers_image = {
+    'Accept': '*/*',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'en-GB,en;q=0.9',
+    'Connection': 'keep-alive',
+    'Host': 'static.notpx.app',
+    'Origin': 'https://app.notpx.app',
+    'Referer': 'https://app.notpx.app/',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-site',
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.165 Mobile Safari/537.36'
+}
+
 headers_socket = {
-    'Accept-Encoding': 'gzip, deflate, br, zstd',
-    'Accept-Language': 'en-US,en;q=0.9,ru;q=0.8',
+#     'Accept-Encoding': 'gzip, deflate, br, zstd',
+#     'Accept-Language': 'en-US,en;q=0.9,ru;q=0.8',
     'Cache-Control': 'no-cache',
     'Connection': 'Upgrade',
-    'Host': 'notpx.app',
+#     'Host': 'notpx.app',
     'Origin': 'https://app.notpx.app',
     'Pragma': 'no-cache',
-    'Sec-Websocket-Extensions': 'permessage-deflate; client_max_window_bits',
+    'Sec-Websocket-Extensions': 'permessage-deflate',
     'Sec-Websocket-Key': '',
     'Sec-Websocket-Protocol': 'centrifuge-protobuf',
     'Sec-Websocket-Version': '13',
@@ -32,6 +46,7 @@ headers_socket = {
 headers_notcoin = {
     'Accept': '*/*',
     'Accept-Language': 'en-US,en;q=0.5',
+    'Accept-Encoding': 'gzip, deflate, br, zstd',
     'Connection': 'keep-alive',
     'Content-Lenght': '0',
     'Host': 'api.notcoin.tg',
@@ -39,6 +54,7 @@ headers_notcoin = {
     'Referer': 'https://webapp.notcoin.tg/',
     'bypass-tunnel-reminder': 'x',
     'TE': 'trailers',
+    'Priority': 'u=1, i',
     'Sec-Fetch-Dest': 'empty',
     'Sec-Fetch-Mode': 'cors',
     'Sec-Fetch-Site': 'same-site',
@@ -47,5 +63,5 @@ headers_notcoin = {
     'Sec-Ch-Ua-platform': '"Android"',
     'User-Agent': 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.165 Mobile Safari/537.36',
     'X-Auth-Token': 'Bearer null',
-    'bypass-tunnel-reminder': 'x'
+    'Bypass-Tunnel-Reminder': 'x'
 }

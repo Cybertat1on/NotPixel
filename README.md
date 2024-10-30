@@ -12,18 +12,19 @@
 > As payment for this script I take 10% of your referrals, to reduce the percentage of referrals, you can adjust this variable PERCENT_OF_REFERRALS_FOR_CREATORS_OF_THE_SOFT.
 
 ## Features  
-| Feature                                                     | Supported  |
-|---------------------------------------------------------------|:----------------:|
-| Multithreading                                                |        ✔️        |
-| Proxy binding to session                                      |        ✔️        |
-| Auto Referral                                                 |        ✔️        |
-| Auto claim                                                    |        ✔️        |
-| Auto paint                                                    |        ✔️        |
-| Auto paint specific pixel to get x3 PX                        |        ✔️        |
-| Auto task                                                     |        ✔️        |
-| Auto upgrade                                                  |        ✔️        |
-| Night sleep mode                 							    |        ✔️        |
-| Support for pyrogram .session                     	        |        ✔️        |
+| Feature                                                    | Supported  |
+|--------------------------------------------------------------|:----------------:|
+| Multithreading                                               |        ✔️        |
+| Proxy binding to session                                     |        ✔️        |
+| Auto Referral                                                |        ✔️        |
+| Auto claim                                                   |        ✔️        |
+| Auto paint                                                   |        ✔️        |
+| Auto paint specific pixel to get x3 PX                       |        ✔️        |
+| Auto task                                                    |        ✔️        |
+| Auto upgrade                                                 |        ✔️        |
+| Night sleep mode                 							   |        ✔️        |
+| Get actual templates list(in browser)                                                 |        ✔️        |
+| Support for pyrogram .session                     	       |        ✔️        |
 
 ## [Settings](https://github.com/Cybertat1on/NotPixel/blob/main/.env-example)
 
@@ -96,12 +97,13 @@ python3 main.py
 
 You can also use arguments for quick start, for example:
 ```shell
-~/NotPixel >>> python3 main.py --action (1/2)
+~/NotPixel >>> python3 main.py --action (1/3)
 # Or
-~/NotPixel >>> python3 main.py -a (1/2)
+~/NotPixel >>> python3 main.py -a (1/3)
 
 # 1 - Run clicker
 # 2 - Creates a session
+# 3 - Get actual templates list(in browser)
 ```
 
 # Windows manual installation
@@ -116,10 +118,11 @@ python main.py
 
 You can also use arguments for quick start, for example:
 ```shell
-~/NotPixel >>> python main.py --action (1/2)
+~/NotPixel >>> python main.py --action (1/3)
 # Or
-~/NotPixel >>> python main.py -a (1/2)
+~/NotPixel >>> python main.py -a (1/3)
 
 # 1 - Run clicker
 # 2 - Creates a session
+# 3 - Get actual templates list(in browser)
 ```

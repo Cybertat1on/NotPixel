@@ -25,6 +25,7 @@ Select an action:
 
     1. Run clicker 
     2. Create session
+    3. Get actual templates list(in browser)
 """
 
 global tg_clients
@@ -90,8 +91,8 @@ async def process() -> None:
 
             if not action.isdigit():
                 logger.warning("Action must be number")
-            elif action not in ["1", "2"]:
-                logger.warning("Action must be 1 or 2")
+            elif action not in ["1", "2", "3"]:
+                logger.warning("Action must be 1, 2 or 3")
             else:
                 action = int(action)
                 break
@@ -103,6 +104,12 @@ async def process() -> None:
 
     elif action == 2:
         await register_sessions()
+    elif action == 3:
+        settings.SHOW_TEMPLATES_LIST = True
+
+        tg_clients = await get_tg_clients()
+
+        await run_tasks(tg_clients=[tg_clients[0]])
 
 async def run_tasks(tg_clients: list[Client]):
     proxies = get_proxies()
