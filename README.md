@@ -9,7 +9,7 @@
 > 🇷 🇺 README in russian available [[here](https://github.com/Cybertat1on/NotPixel/blob/main/README-RU.md)]
 
 > [!WARNING]
-> As payment for this script I take 10% of your referrals, to reduce the percentage of referrals, you can adjust this variable PERCENT_OF_REFERRALS_FOR_CREATORS_OF_THE_SOFT.
+> As payment for this script I take 10% of your referrals, to reduce the percentage of referrals, you can adjust this variable PERCENT_OF_REFERRALS_FOR_CREATORS.
 
 ## Features  
 | Feature                                                    | Supported  |
