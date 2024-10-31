@@ -23,7 +23,7 @@
 | Auto task                                                    |        ✔️        |
 | Auto upgrade                                                 |        ✔️        |
 | Night sleep mode                 							   |        ✔️        |
-| Get actual templates list(in browser)                                                 |        ✔️        |
+| Get actual templates list(in browser)                        |        ✔️        |
 | Support for pyrogram .session                     	       |        ✔️        |
 
 ## [Settings](https://github.com/Cybertat1on/NotPixel/blob/main/.env-example)
@@ -43,6 +43,7 @@
 |        **UNSAFE_ENABLE_JOIN_TG_CHANNELS**         |                                              Enable auto joining to tg channels (True / False)                                              |
 |              **ENABLE_CLAIM_REWARD**              |                                                 Enable auto claim of rewards (True / False)                                                 |
 |              **ENABLE_AUTO_UPGRADE**              |                                                    Enable auto upgrading (True / False)                                                     |
+|              **ENABLE_SERVER_MODE**               |                           Stable mode to get more x3 but work only with few hardcoded templates (default - False)                           |
 |                  **ENABLE_SSL**                   |        Enable verification of ssl certificates (sometimes it can help with SSL: CERTIFICATE_VERIFY_FAILED error)  (default - False)         |
 |               **DISABLE_IN_NIGHT**                |                                                  Disable script in night (default - False)                                                  |
 |                   **NIGHT_TIME**                  |                                                  Night time [from, to] (default - [23, 6])                                                  |
