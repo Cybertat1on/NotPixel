@@ -26,7 +26,7 @@ async def generate_template_html_page(templates: dict):
         <div id="templates">
     '''
 
-
+    # Generate HTML for each template
     for template in templates:
         html_content += f'''
             <div class="template">
@@ -38,7 +38,7 @@ async def generate_template_html_page(templates: dict):
             </div>
         '''
 
-
+    # Close HTML tags
     html_content += '''
         </div>
     </body>

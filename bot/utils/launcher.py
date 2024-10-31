@@ -25,7 +25,7 @@ Select an action:
 
     1. Run clicker 
     2. Create session
-    3. Get actual templates list(in browser)
+    3. Get actual templates list
 """
 
 global tg_clients
